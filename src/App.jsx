@@ -15,8 +15,8 @@ function App() {
           width: "100vw",
         }}
       >
-        <Appbar />
         <BrowserRouter>
+          <Appbar />
           <Routes>
             <Route path="/login" element={<SignIn />} />
             <Route path="/register" element={<SignUp />} />

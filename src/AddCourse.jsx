@@ -67,7 +67,9 @@ export default function AddCourse() {
               "Content-Type": "application/json",
               Authorization: "Bearer " + localStorage.getItem("token"),
             },
-          });
+          }).then((res) =>
+            res.json().then((data) => alert("Course has been added"))
+          );
         }}
       >
         ADD COURSE

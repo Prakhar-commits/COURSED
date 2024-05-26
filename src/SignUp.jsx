@@ -4,8 +4,8 @@ import React, { useState } from "react";
 export default function SignUp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  console.log(email);
-  console.log(password);
+  // console.log(email);
+  // console.log(password);
   return (
     <>
       <Box style={{ padding: 20, display: "flex", justifyContent: "center" }}>

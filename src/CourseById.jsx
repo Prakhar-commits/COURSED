@@ -4,7 +4,7 @@ import { Course } from "./Courses";
 import { Box, Button, Card, TextField, Typography } from "@mui/material";
 
 export default function CourseById() {
-  const [course, setCourse] = useState([]);
+  const [course, setCourse] = useState(null);
 
   const { courseId } = useParams();
   useEffect(() => {

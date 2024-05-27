@@ -1,6 +1,6 @@
-const express = require("express");
-const { User, Course } = require("../db");
-const { generatejwt, authenticateJWT } = require("../middleware/auth");
+import express from "express";
+import { Course, User } from "../db/index.js";
+import { generatejwt, authenticateJWT } from "../middleware/auth.js";
 const router = express.Router();
 
 router.post("/signup", async (req, res) => {
@@ -61,4 +61,4 @@ router.get("/purchasedCoures", authenticateJWT, async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

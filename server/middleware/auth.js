@@ -1,6 +1,6 @@
-const dotenv = require("dotenv");
+import dotenv from "dotenv";
 dotenv.config();
-const jwt = require("jsonwebtoken");
+import jwt from "jsonwebtoken";
 
 const generatejwt = (user) => {
   const payload = { username: user.username };

@@ -1,6 +1,6 @@
-import { Admin, Course } from "../db";
-import { generatejwt, authenticateJWT } from "../middleware/auth";
-const express = require("express");
+import { Admin, Course } from "../db/index.js";
+import { generatejwt, authenticateJWT } from "../middleware/auth.js";
+import express from "express";
 const router = express.Router();
 
 router.get("/me", async (req, res) => {
@@ -63,4 +63,4 @@ router.put("/courses/:courseId", authenticateJWT, async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

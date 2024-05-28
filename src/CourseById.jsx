@@ -2,26 +2,28 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Course } from "./Courses";
 import { Box, Button, Card, TextField, Typography } from "@mui/material";
+import axios from "axios";
 
 export default function CourseById() {
   const [course, setCourse] = useState(null);
 
   const { courseId } = useParams();
-  useEffect(() => {
-    fetch("http://localhost:3000/admin/courses", {
-      method: "GET",
+
+  const getCourseById = async () => {
+    const response = await axios.get("http://localhost:3000/admin/courses", {
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
       },
-    }).then((res) =>
-      res.json().then((data) => {
-        const courses = data.courses;
-        const course = courses.find((course) => {
-          return course.courseId === parseInt(courseId);
-        });
-        setCourse(course);
-      })
-    );
+    });
+    const courses = response.data.Courses;
+    const course = courses.find((course) => {
+      return course._id === courseId;
+    });
+    setCourse(course);
+  };
+
+  useEffect(() => {
+    getCourseById();
   }, []);
 
   if (!course) {
@@ -52,7 +54,7 @@ function UpdateCourseCard({ course, setCourse }) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
-  const courseId = course.courseId;
+  const courseId = course._id;
   return (
     <>
       <Card variant="elevation" style={{ width: 400, padding: 20 }}>
@@ -96,38 +98,37 @@ function UpdateCourseCard({ course, setCourse }) {
       <Button
         variant="contained"
         size="large"
-        onClick={() => {
-          fetch("http://localhost:3000/admin/courses/" + course.courseId, {
-            method: "PUT",
-            body: JSON.stringify({
+        onClick={async () => {
+          const res = await axios.put(
+            "http://localhost:3000/admin/courses/" + course._id,
+            {
               title: title,
               description: description,
               price: price,
               //   imageLink: here we will implement upload functionality
               //   published: will implement a checkbox functionalitiy,
-            }),
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: "Bearer " + localStorage.getItem("token"),
             },
-          }).then((res) =>
-            res.json().then((data) => {
-              let updatedCourse = {};
-
-              if (course.courseId === courseId) {
-                updatedCourse = {
-                  title: title,
-                  description: description,
-                  price: price,
-                  courseId: courseId,
-                };
-              } else {
-                updatedCourse = { course };
-              }
-              console.log(updatedCourse);
-              setCourse(updatedCourse);
-            })
+            {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: "Bearer " + localStorage.getItem("token"),
+              },
+            }
           );
+          let updatedCourse = {};
+          if (course._id === courseId) {
+            updatedCourse = {
+              ...course,
+              title: title,
+              description: description,
+              price: price,
+              courseId: courseId,
+            };
+          } else {
+            updatedCourse = { course };
+          }
+          console.log(updatedCourse);
+          setCourse(updatedCourse);
         }}
       >
         UPDATE COURSE

@@ -1,4 +1,5 @@
 import { Box, Button, Typography } from "@mui/material";
+import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -6,22 +7,20 @@ export default function Appbar() {
   const navigate = useNavigate();
   const [useremail, setUserEmail] = useState(null);
 
-  useEffect(() => {
-    fetch("http://localhost:3000/admin/me", {
-      method: "GET",
+  const settingUsername = async () => {
+    const res = await axios.get("http://localhost:3000/admin/me", {
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
       },
-    }).then((res) => {
-      res.json().then((data) => {
-        // console.log(data);
-        if (data.username) {
-          setUserEmail(data.username);
-        }
-
-        // console.log(data.username);
-      });
     });
+    if (res.data.username) {
+      setUserEmail(res.data.username);
+      console.log(res.data.username);
+    }
+  };
+
+  useEffect(() => {
+    settingUsername();
   }, []);
 
   if (useremail) {

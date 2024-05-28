@@ -1,21 +1,22 @@
 import { Box, Card, Typography } from "@mui/material";
+import axios from "axios";
 import React, { useEffect, useState } from "react";
 
 export default function Courses() {
   const [courses, setCourses] = useState([]);
 
-  useEffect(() => {
-    fetch("http://localhost:3000/admin/courses", {
-      method: "GET",
+  const getCourses = async () => {
+    const res = await axios.get("http://localhost:3000/admin/courses/", {
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
       },
-    }).then((res) =>
-      res.json().then((data) => {
-        setCourses(data.courses);
-        console.log(data.courses);
-      })
-    );
+    });
+    setCourses(res.data.Courses);
+    console.log(res.data);
+  };
+
+  useEffect(() => {
+    getCourses();
   }, []);
 
   return (
@@ -28,7 +29,7 @@ export default function Courses() {
         justifyContent={"center"}
       >
         {courses.map((course) => {
-          return <Course key={course.courseId} course={course} />;
+          return <Course key={course._id} course={course} />;
         })}
       </Box>
     </>
@@ -47,7 +48,7 @@ export function Course({ course }) {
           }}
         >
           <Typography variant="h4" fontWeight={100} textAlign={"center"}>
-            {course.title} {course.courseId}
+            {course.title}
           </Typography>
           <Typography variant="body1" fontWeight={50} textAlign={"center"}>
             {course.description}

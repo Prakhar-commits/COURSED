@@ -3,8 +3,12 @@ import { generatejwt, authenticateJWT } from "../middleware/auth.js";
 import express from "express";
 const router = express.Router();
 
-router.get("/me", async (req, res) => {
+router.get("/me", authenticateJWT, async (req, res) => {
   const admin = await Admin.findOne({ username: req.user.username });
+  if (!admin) {
+    res.status(403).json({ msg: "Admin doesnt exist" });
+    return;
+  }
   res.json({
     username: admin.username,
   });

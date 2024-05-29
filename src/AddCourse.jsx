@@ -1,10 +1,11 @@
 import { Box, Button, Card, TextField, Typography } from "@mui/material";
+import axios from "axios";
 import React, { useState } from "react";
 
 export default function AddCourse() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [price, setPrice] = useState("");
+  const [price, setPrice] = useState(0);
   const [imagelink, setImageLink] = useState("");
   const [published, setPublished] = useState("");
   return (
@@ -53,23 +54,23 @@ export default function AddCourse() {
       <Button
         variant="contained"
         size="large"
-        onClick={() => {
-          fetch("http://localhost:3000/admin/courses", {
-            method: "POST",
-            body: JSON.stringify({
+        onClick={async () => {
+          const res = await axios.post(
+            "http://localhost:3000/admin/courses",
+            {
               title: title,
               description: description,
               price: price,
               //   imageLink: here we will implement upload functionality
               //   publised: will implement a checkbox functionalitiy,
-            }),
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: "Bearer " + localStorage.getItem("token"),
             },
-          }).then((res) =>
-            res.json().then((data) => alert("Course has been added"))
+            {
+              headers: {
+                Authorization: "Bearer " + localStorage.getItem("token"),
+              },
+            }
           );
+          alert("Course has been Added");
         }}
       >
         ADD COURSE

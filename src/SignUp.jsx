@@ -1,4 +1,5 @@
 import { Box, Button, Card, TextField, Typography } from "@mui/material";
+import axios from "axios";
 import React, { useState } from "react";
 
 export default function SignUp() {
@@ -22,6 +23,7 @@ export default function SignUp() {
               fullWidth={true}
               label="Email"
               variant="outlined"
+              type="email"
             />
             <TextField
               onChange={(e) => {
@@ -30,26 +32,27 @@ export default function SignUp() {
               fullWidth={true}
               label="Password"
               variant="outlined"
+              type="password"
             />
             <Button
               variant="contained"
               size="large"
-              onClick={() => {
-                fetch("http://localhost:3000/admin/signup", {
-                  method: "POST",
-                  body: JSON.stringify({
+              onClick={async () => {
+                const res = await axios.post(
+                  "http://localhost:3000/admin/signup",
+                  {
                     username: email,
                     password: password,
-                  }),
-                  headers: {
-                    "Content-type": "application/json",
                   },
-                }).then((res) => {
-                  res.json().then((data) => {
-                    let token = data.token;
-                    localStorage.setItem("token", token);
-                  });
-                });
+                  {
+                    headers: {
+                      "Content-type": "application/json",
+                    },
+                  }
+                );
+                let token = res.data.token;
+                localStorage.setItem("token", token);
+                window.location("/");
               }}
             >
               Signup

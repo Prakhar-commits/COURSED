@@ -51,9 +51,9 @@ function CourseCard({ course, setCourse }) {
 }
 
 function UpdateCourseCard({ course, setCourse }) {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [price, setPrice] = useState("");
+  const [title, setTitle] = useState(course.title);
+  const [description, setDescription] = useState(course.description);
+  const [price, setPrice] = useState(course.price);
   const courseId = course._id;
   return (
     <>
@@ -61,6 +61,7 @@ function UpdateCourseCard({ course, setCourse }) {
         <Typography variant="h5">Update Course Details </Typography>
         <Box display="flex" flexDirection="column" gap={2}>
           <TextField
+            value={title}
             fullWidth={true}
             id="outlined-basic"
             label="Title"
@@ -68,6 +69,7 @@ function UpdateCourseCard({ course, setCourse }) {
             onChange={(e) => setTitle(e.target.value)}
           />
           <TextField
+            value={description}
             fullWidth={true}
             id="outlined-basic"
             label="Description"
@@ -75,6 +77,7 @@ function UpdateCourseCard({ course, setCourse }) {
             onChange={(e) => setDescription(e.target.value)}
           />{" "}
           <TextField
+            value={price}
             fullWidth={true}
             id="outlined-basic"
             label="Price"

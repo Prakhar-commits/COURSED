@@ -8,57 +8,72 @@ import AddCourse from "./AddCourse";
 import Courses from "./Courses";
 import CourseById from "./CourseById";
 import { Landing } from "./Landing";
-import { useState } from "react";
 import { useEffect } from "react";
 import axios from "axios";
 import { BASE_URL } from "./config";
+import { RecoilRoot, useSetRecoilState } from "recoil";
+import { userState } from "./store/atoms/user";
 
 function App() {
-  const [useremail, setUserEmail] = useState(null);
+  return (
+    <>
+      <RecoilRoot>
+        <Box
+          style={{
+            height: "100vh",
+            width: "100vw",
+          }}
+        >
+          <BrowserRouter>
+            <Appbar />
+            <InitUser />
+            <Routes>
+              <Route path="/signin" element={<SignIn />} />
+              <Route path="/signup" element={<SignUp />} />
+              <Route path="/courses" element={<Courses />} />
+              <Route path="/courses/:courseId" element={<CourseById />} />
+              <Route path="/addcourse" element={<AddCourse />} />
+              <Route path="/" element={<Landing />} />
+            </Routes>
+          </BrowserRouter>
+        </Box>
+      </RecoilRoot>
+    </>
+  );
+}
+
+function InitUser() {
+  const setUser = useSetRecoilState(userState);
 
   const settingUsername = async () => {
-    const res = await axios.get(`${BASE_URL}/admin/me`, {
-      headers: {
-        Authorization: "Bearer " + localStorage.getItem("token"),
-      },
-    });
-    if (res.data.username) {
-      setUserEmail(res.data.username);
+    try {
+      const res = await axios.get(`${BASE_URL}/admin/me`, {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        },
+      });
+      if (res.data.username) {
+        setUser({
+          isLoading: false,
+          userEmail: res.data.username,
+        });
+      } else {
+        setUser({
+          isLoading: false,
+          userEmail: null,
+        });
+      }
+    } catch (e) {
+      setUser({
+        isLoading: false,
+        userEmail: null,
+      });
     }
   };
 
   useEffect(() => {
     settingUsername();
   }, []);
-
-  return (
-    <>
-      <Box
-        style={{
-          height: "100vh",
-          width: "100vw",
-        }}
-      >
-        <BrowserRouter>
-          <Appbar useremail={useremail} setUserEmail={setUserEmail} />
-          <Routes>
-            <Route
-              path="/signin"
-              element={<SignIn setUserEmail={setUserEmail} />}
-            />
-            <Route
-              path="/signup"
-              element={<SignUp setUserEmail={setUserEmail} />}
-            />
-            <Route path="/courses" element={<Courses />} />
-            <Route path="/courses/:courseId" element={<CourseById />} />
-            <Route path="/addcourse" element={<AddCourse />} />
-            <Route path="/" element={<Landing useremail={useremail} />} />
-          </Routes>
-        </BrowserRouter>
-      </Box>
-    </>
-  );
 }
 
 export default App;

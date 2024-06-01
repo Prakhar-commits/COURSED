@@ -3,9 +3,19 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { BASE_URL } from "./config";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { userState } from "./store/atoms/user";
+import { isLoadingState, userEmailState } from "./store/selectors/user";
 
-export default function Appbar({ useremail, setUserEmail }) {
+export default function Appbar() {
   const navigate = useNavigate();
+  const setUser = useSetRecoilState(userState);
+  const useremail = useRecoilValue(userEmailState);
+  const isLoading = useRecoilValue(isLoadingState);
+
+  if (isLoading) {
+    return <></>;
+  }
 
   if (useremail) {
     return (
@@ -49,7 +59,10 @@ export default function Appbar({ useremail, setUserEmail }) {
               variant="contained"
               onClick={() => {
                 localStorage.removeItem("token");
-                setUserEmail(null);
+                setUser({
+                  isLoading: false,
+                  userEmail: null,
+                });
                 navigate("/");
               }}
             >

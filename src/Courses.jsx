@@ -3,23 +3,39 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { BASE_URL } from "./config";
 import { useNavigate } from "react-router-dom";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { courseState } from "./store/atoms/course";
+import {
+  courseDescription,
+  courseDetails,
+  courseTitle,
+  isCourseLoading,
+} from "./store/selectors/course";
 
 export default function Courses() {
-  const [courses, setCourses] = useState([]);
-
+  const setCourses = useSetRecoilState(courseState);
+  const courses = useRecoilValue(courseDetails);
+  console.log(courses);
+  const isLoading = useRecoilValue(isCourseLoading);
   const getCourses = async () => {
     const res = await axios.get(`${BASE_URL}/admin/courses/`, {
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
       },
     });
-    setCourses(res.data.Courses);
-    console.log(res.data);
+    setCourses({
+      isLoading: false,
+      course: res.data.Courses,
+    });
   };
 
   useEffect(() => {
     getCourses();
   }, []);
+
+  if (isLoading) {
+    return <Typography>Loading...</Typography>;
+  }
 
   return (
     <>
@@ -39,6 +55,8 @@ export default function Courses() {
 }
 
 export function Course({ course }) {
+  const { title, description, _id } = course;
+
   const navigate = useNavigate();
   return (
     <>
@@ -51,10 +69,10 @@ export function Course({ course }) {
         }}
       >
         <Typography textAlign={"center"} variant="h5">
-          {course.title}
+          {title}
         </Typography>
         <Typography textAlign={"center"} variant="subtitle1">
-          {course.description}
+          {description}
         </Typography>
         {/* <img src={course.imageLink} style={{ width: 300 }}></img> */}
         <Box
@@ -64,7 +82,7 @@ export function Course({ course }) {
             variant="contained"
             size="large"
             onClick={() => {
-              navigate("/courses/" + course._id);
+              navigate("/courses/" + _id);
             }}
           >
             Edit

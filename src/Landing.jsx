@@ -1,9 +1,13 @@
 import { Box, Grid, Typography } from "@mui/material";
 import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
+import { useRecoilValue } from "recoil";
+import { isLoadingState, userEmailState } from "./store/selectors/user";
 
-export const Landing = ({ useremail }) => {
+export const Landing = () => {
   const navigate = useNavigate();
+  const useremail = useRecoilValue(userEmailState);
+  const userloading = useRecoilValue(isLoadingState);
   return (
     <Box>
       <Grid container style={{ padding: "5vw" }}>
@@ -14,7 +18,7 @@ export const Landing = ({ useremail }) => {
               A place to learn, earn and grow
             </Typography>
 
-            {!useremail && (
+            {!userloading && !useremail && (
               <Box style={{ display: "flex", marginTop: 20 }}>
                 <Box style={{ marginRight: 10 }}>
                   <Button

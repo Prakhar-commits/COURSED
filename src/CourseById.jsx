@@ -4,10 +4,13 @@ import { Course } from "./Courses";
 import { Box, Button, Card, Grid, TextField, Typography } from "@mui/material";
 import axios from "axios";
 import { BASE_URL } from "./config";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { courseState } from "./store/atoms/course";
+import { courseDetails, courseTitle } from "./store/selectors/course";
 
 export default function CourseById() {
-  const [course, setCourse] = useState(null);
-
+  const setCourse = useSetRecoilState(courseState);
+  const course = useRecoilValue(courseDetails);
   const { courseId } = useParams();
 
   const getCourseById = async () => {
@@ -20,7 +23,7 @@ export default function CourseById() {
     const course = courses.find((course) => {
       return course._id === courseId;
     });
-    setCourse(course);
+    setCourse({ isLoading: false, course: course });
   };
 
   useEffect(() => {
@@ -37,20 +40,21 @@ export default function CourseById() {
 
   return (
     <div>
-      <GrayTopper title={course.title} />
+      <GrayTopper />
       <Grid container>
         <Grid item lg={8} md={12} sm={12}>
-          <UpdateCourseCard course={course} setCourse={setCourse} />
+          <UpdateCourseCard />
         </Grid>
         <Grid item lg={4} md={12} sm={12}>
-          <CourseCard course={course} />
+          <CourseCard />
         </Grid>
       </Grid>
     </div>
   );
 }
 
-function GrayTopper({ title }) {
+function GrayTopper() {
+  const title = useRecoilValue(courseTitle);
   return (
     <div
       style={{
@@ -84,7 +88,8 @@ function GrayTopper({ title }) {
   );
 }
 
-function CourseCard({ course }) {
+function CourseCard() {
+  const title = useRecoilValue(courseTitle);
   return (
     <div
       style={{
@@ -105,14 +110,14 @@ function CourseCard({ course }) {
           zIndex: 2,
         }}
       >
-        <img src={course.imageLink} style={{ width: 350 }}></img>
+        {/* <img src={course.imageLink} style={{ width: 350 }}></img> */}
         <div style={{ marginLeft: 10 }}>
-          <Typography variant="h5">{course.title}</Typography>
+          <Typography variant="h5">{title}</Typography>
           <Typography variant="subtitle2" style={{ color: "gray" }}>
             Price
           </Typography>
           <Typography variant="subtitle1">
-            <b>Rs {course.price} </b>
+            {/* <b>Rs {price} </b> */}
           </Typography>
         </div>
       </Card>
@@ -120,11 +125,14 @@ function CourseCard({ course }) {
   );
 }
 
-function UpdateCourseCard({ course, setCourse }) {
-  const [title, setTitle] = useState(course.title);
-  const [description, setDescription] = useState(course.description);
-  const [price, setPrice] = useState(course.price);
-  const courseId = course._id;
+function UpdateCourseCard() {
+  const [courseDetails, setCourse] = useRecoilState(courseState);
+  const [title, setTitle] = useState(courseDetails.course.title);
+  const [description, setDescription] = useState(
+    courseDetails.course.description
+  );
+  const [price, setPrice] = useState(courseDetails.course.price);
+  const courseId = courseDetails.course._id;
   return (
     <>
       <Card
@@ -177,7 +185,7 @@ function UpdateCourseCard({ course, setCourse }) {
           size="large"
           onClick={async () => {
             const res = await axios.put(
-              `${BASE_URL}/admin/courses/` + course._id,
+              `${BASE_URL}/admin/courses/` + courseDetails.course._id,
               {
                 title: title,
                 description: description,
@@ -193,9 +201,9 @@ function UpdateCourseCard({ course, setCourse }) {
               }
             );
             let updatedCourse = {};
-            if (course._id === courseId) {
+            if (courseDetails.course._id === courseId) {
               updatedCourse = {
-                ...course,
+                ...courseDetails.course,
                 title: title,
                 description: description,
                 price: price,
@@ -204,7 +212,7 @@ function UpdateCourseCard({ course, setCourse }) {
             } else {
               updatedCourse = { course };
             }
-            setCourse(updatedCourse);
+            setCourse({ course: updatedCourse, isLoading: false });
           }}
         >
           UPDATE COURSE

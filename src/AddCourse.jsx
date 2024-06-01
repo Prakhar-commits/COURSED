@@ -1,6 +1,7 @@
 import { Box, Button, Card, TextField, Typography } from "@mui/material";
 import axios from "axios";
 import React, { useState } from "react";
+import { BASE_URL } from "./config";
 
 export default function AddCourse() {
   const [title, setTitle] = useState("");
@@ -56,7 +57,7 @@ export default function AddCourse() {
         size="large"
         onClick={async () => {
           const res = await axios.post(
-            "http://localhost:3000/admin/courses",
+            `${BASE_URL}/admin/courses`,
             {
               title: title,
               description: description,

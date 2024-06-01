@@ -1,6 +1,7 @@
 import { Box, Button, Card, TextField, Typography } from "@mui/material";
 import axios from "axios";
 import React, { useState } from "react";
+import { BASE_URL } from "./config";
 
 export default function SignUp() {
   const [email, setEmail] = useState("");
@@ -39,7 +40,7 @@ export default function SignUp() {
               size="large"
               onClick={async () => {
                 const res = await axios.post(
-                  "http://localhost:3000/admin/signup",
+                  `${BASE_URL}/admin/signup`,
                   {
                     username: email,
                     password: password,

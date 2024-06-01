@@ -1,7 +1,11 @@
 import { Box, Button, Card, TextField, Typography } from "@mui/material";
-import React from "react";
+import axios from "axios";
+import React, { useState } from "react";
+import { BASE_URL } from "./config";
 
 export default function SignIn() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   return (
     <>
       <Box style={{ padding: 20, display: "flex", justifyContent: "center" }}>
@@ -16,14 +20,33 @@ export default function SignIn() {
               id="outlined-basic"
               label="Username"
               variant="outlined"
+              onChange={(e) => {
+                setEmail(e.target.value);
+              }}
             />
             <TextField
               fullWidth={true}
               id="outlined-basic"
               label="Password"
               variant="outlined"
+              type="password"
+              onChange={(e) => {
+                setPassword(e.target.value);
+              }}
             />
-            <Button variant="contained" size="large">
+            <Button
+              variant="contained"
+              size="large"
+              onClick={async () => {
+                const res = await axios.post(`${BASE_URL}/admin/login`, {
+                  username: email,
+                  password: password,
+                });
+                const data = res.data;
+                localStorage.setItem("Bearer " + data.token);
+                window.location("/");
+              }}
+            >
               SignIn
             </Button>
           </Box>

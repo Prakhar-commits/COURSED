@@ -2,13 +2,14 @@ import { Box, Button, Typography } from "@mui/material";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { BASE_URL } from "./config";
 
 export default function Appbar() {
   const navigate = useNavigate();
   const [useremail, setUserEmail] = useState(null);
 
   const settingUsername = async () => {
-    const res = await axios.get("http://localhost:3000/admin/me", {
+    const res = await axios.get(`${BASE_URL}/admin/me`, {
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
       },
@@ -32,17 +33,40 @@ export default function Appbar() {
           padding: 20,
         }}
       >
-        <Box>
+        <Box
+          component={Button}
+          onClick={() => {
+            navigate("/");
+          }}
+        >
           <Typography variant="h6">Coursed</Typography>
         </Box>
+
         <Box display="flex">
-          <Box style={{ marginRight: 20 }}>{useremail}</Box>
+          <Box style={{ marginRight: 20 }}>
+            <Button
+              onClick={() => {
+                navigate("/addcourse");
+              }}
+            >
+              Add Course
+            </Button>
+          </Box>
+          <Box style={{ marginRight: 10 }}>
+            <Button
+              onClick={() => {
+                navigate("/courses");
+              }}
+            >
+              Courses
+            </Button>
+          </Box>
           <Box>
             <Button
               variant="contained"
               onClick={() => {
                 localStorage.removeItem("token");
-                window.location = "/register";
+                navigate("/");
               }}
             >
               Logout
@@ -60,15 +84,21 @@ export default function Appbar() {
         padding: 20,
       }}
     >
-      <Box>
+      <Box
+        component={Button}
+        onClick={() => {
+          navigate("/");
+        }}
+      >
         <Typography variant="h6">Coursed</Typography>
       </Box>
+
       <Box display="flex">
         <Box style={{ marginRight: 20 }}>
           <Button
             variant="contained"
             onClick={() => {
-              navigate("/register");
+              navigate("/signup");
             }}
           >
             SignUp
@@ -78,7 +108,7 @@ export default function Appbar() {
           <Button
             variant="contained"
             onClick={() => {
-              navigate("/login");
+              navigate("/signin");
             }}
           >
             SignIn

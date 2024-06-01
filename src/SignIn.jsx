@@ -2,10 +2,12 @@ import { Box, Button, Card, TextField, Typography } from "@mui/material";
 import axios from "axios";
 import React, { useState } from "react";
 import { BASE_URL } from "./config";
+import { useNavigate } from "react-router-dom";
 
-export default function SignIn() {
+export default function SignIn({ setUserEmail }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
   return (
     <>
       <Box style={{ padding: 20, display: "flex", justifyContent: "center" }}>
@@ -43,8 +45,9 @@ export default function SignIn() {
                   password: password,
                 });
                 const data = res.data;
-                localStorage.setItem("Bearer " + data.token);
-                window.location("/");
+                localStorage.setItem("token", data.token);
+                setUserEmail(email);
+                navigate("/courses");
               }}
             >
               SignIn

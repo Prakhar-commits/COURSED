@@ -4,25 +4,8 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { BASE_URL } from "./config";
 
-export default function Appbar() {
+export default function Appbar({ useremail, setUserEmail }) {
   const navigate = useNavigate();
-  const [useremail, setUserEmail] = useState(null);
-
-  const settingUsername = async () => {
-    const res = await axios.get(`${BASE_URL}/admin/me`, {
-      headers: {
-        Authorization: "Bearer " + localStorage.getItem("token"),
-      },
-    });
-    if (res.data.username) {
-      setUserEmail(res.data.username);
-      console.log(res.data.username);
-    }
-  };
-
-  useEffect(() => {
-    settingUsername();
-  }, []);
 
   if (useremail) {
     return (
@@ -66,6 +49,7 @@ export default function Appbar() {
               variant="contained"
               onClick={() => {
                 localStorage.removeItem("token");
+                setUserEmail(null);
                 navigate("/");
               }}
             >

@@ -1,16 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Course } from "./Courses";
-import { Box, Button, Card, TextField, Typography } from "@mui/material";
+import { Box, Button, Card, Grid, TextField, Typography } from "@mui/material";
 import axios from "axios";
+import { BASE_URL } from "./config";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { courseState } from "./store/atoms/course";
+import { courseDetails, courseTitle } from "./store/selectors/course";
 
 export default function CourseById() {
-  const [course, setCourse] = useState(null);
-
+  const setCourse = useSetRecoilState(courseState);
+  const course = useRecoilValue(courseDetails);
   const { courseId } = useParams();
 
   const getCourseById = async () => {
-    const response = await axios.get("http://localhost:3000/admin/courses", {
+    const response = await axios.get(`${BASE_URL}/admin/courses`, {
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
       },
@@ -19,7 +23,7 @@ export default function CourseById() {
     const course = courses.find((course) => {
       return course._id === courseId;
     });
-    setCourse(course);
+    setCourse({ isLoading: false, course: course });
   };
 
   useEffect(() => {
@@ -35,29 +39,106 @@ export default function CourseById() {
   }
 
   return (
-    <>
-      <CourseCard course={course} setCourse={setCourse} />
-    </>
+    <div>
+      <GrayTopper />
+      <Grid container>
+        <Grid item lg={8} md={12} sm={12}>
+          <UpdateCourseCard />
+        </Grid>
+        <Grid item lg={4} md={12} sm={12}>
+          <CourseCard />
+        </Grid>
+      </Grid>
+    </div>
   );
 }
 
-function CourseCard({ course, setCourse }) {
+function GrayTopper() {
+  const title = useRecoilValue(courseTitle);
   return (
-    <>
-      <Course course={course} />
-      <UpdateCourseCard course={course} setCourse={setCourse} />
-    </>
+    <div
+      style={{
+        height: 250,
+        background: "#212121",
+        top: 0,
+        width: "100vw",
+        zIndex: 0,
+        marginBottom: -250,
+      }}
+    >
+      <div
+        style={{
+          height: 250,
+          display: "flex",
+          justifyContent: "center",
+          flexDirection: "column",
+        }}
+      >
+        <div>
+          <Typography
+            style={{ color: "white", fontWeight: 600 }}
+            variant="h3"
+            textAlign={"center"}
+          >
+            {title}
+          </Typography>
+        </div>
+      </div>
+    </div>
   );
 }
 
-function UpdateCourseCard({ course, setCourse }) {
-  const [title, setTitle] = useState(course.title);
-  const [description, setDescription] = useState(course.description);
-  const [price, setPrice] = useState(course.price);
-  const courseId = course._id;
+function CourseCard() {
+  const title = useRecoilValue(courseTitle);
+  return (
+    <div
+      style={{
+        display: "flex",
+        marginTop: 50,
+        justifyContent: "center",
+        width: "100%",
+      }}
+    >
+      <Card
+        style={{
+          margin: 10,
+          width: 350,
+          minHeight: 200,
+          borderRadius: 20,
+          marginRight: 50,
+          paddingBottom: 15,
+          zIndex: 2,
+        }}
+      >
+        {/* <img src={course.imageLink} style={{ width: 350 }}></img> */}
+        <div style={{ marginLeft: 10 }}>
+          <Typography variant="h5">{title}</Typography>
+          <Typography variant="subtitle2" style={{ color: "gray" }}>
+            Price
+          </Typography>
+          <Typography variant="subtitle1">
+            {/* <b>Rs {price} </b> */}
+          </Typography>
+        </div>
+      </Card>
+    </div>
+  );
+}
+
+function UpdateCourseCard() {
+  const [courseDetails, setCourse] = useRecoilState(courseState);
+  const [title, setTitle] = useState(courseDetails.course.title);
+  const [description, setDescription] = useState(
+    courseDetails.course.description
+  );
+  const [price, setPrice] = useState(courseDetails.course.price);
+  const courseId = courseDetails.course._id;
   return (
     <>
-      <Card variant="elevation" style={{ width: 400, padding: 20 }}>
+      <Card
+        variant="elevation"
+        style={{ width: 400, padding: 20, marginTop: 30, marginLeft: 30 }}
+      >
         <Typography variant="h5">Update Course Details </Typography>
         <Box display="flex" flexDirection="column" gap={2}>
           <TextField
@@ -97,45 +178,46 @@ function UpdateCourseCard({ course, setCourse }) {
             variant="outlined"
           /> */}
         </Box>
-      </Card>
-      <Button
-        variant="contained"
-        size="large"
-        onClick={async () => {
-          const res = await axios.put(
-            "http://localhost:3000/admin/courses/" + course._id,
-            {
-              title: title,
-              description: description,
-              price: price,
-              //   imageLink: here we will implement upload functionality
-              //   published: will implement a checkbox functionalitiy,
-            },
-            {
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: "Bearer " + localStorage.getItem("token"),
+
+        <Button
+          style={{ marginTop: 20 }}
+          variant="contained"
+          size="large"
+          onClick={async () => {
+            const res = await axios.put(
+              `${BASE_URL}/admin/courses/` + courseDetails.course._id,
+              {
+                title: title,
+                description: description,
+                price: price,
+                //   imageLink: here we will implement upload functionality
+                //   published: will implement a checkbox functionalitiy,
               },
+              {
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: "Bearer " + localStorage.getItem("token"),
+                },
+              }
+            );
+            let updatedCourse = {};
+            if (courseDetails.course._id === courseId) {
+              updatedCourse = {
+                ...courseDetails.course,
+                title: title,
+                description: description,
+                price: price,
+                courseId: courseId,
+              };
+            } else {
+              updatedCourse = { course };
             }
-          );
-          let updatedCourse = {};
-          if (course._id === courseId) {
-            updatedCourse = {
-              ...course,
-              title: title,
-              description: description,
-              price: price,
-              courseId: courseId,
-            };
-          } else {
-            updatedCourse = { course };
-          }
-          console.log(updatedCourse);
-          setCourse(updatedCourse);
-        }}
-      >
-        UPDATE COURSE
-      </Button>
+            setCourse({ course: updatedCourse, isLoading: false });
+          }}
+        >
+          UPDATE COURSE
+        </Button>
+      </Card>
     </>
   );
 }

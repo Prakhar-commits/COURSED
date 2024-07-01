@@ -43,13 +43,10 @@ export default function SignIn() {
               variant="contained"
               size="large"
               onClick={async () => {
-                const res = await axios.post(
-                  `http://localhost:3000/api/admin/login`,
-                  {
-                    username: email,
-                    password: password,
-                  }
-                );
+                const res = await axios.post(`/api/admin/login`, {
+                  username: email,
+                  password: password,
+                });
                 // const data = res.data;
                 // localStorage.setItem("token", data.token);
                 setUser({

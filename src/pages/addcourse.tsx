@@ -57,16 +57,13 @@ export default function AddCourse() {
         variant="contained"
         size="large"
         onClick={async () => {
-          const res = await axios.post(
-            `http://localhost:3000/api/admin/courses`,
-            {
-              title: title,
-              description: description,
-              price: price,
-              //   imageLink: here we will implement upload functionality
-              //   publised: will implement a checkbox functionalitiy,
-            }
-          );
+          const res = await axios.post(`/api/admin/courses`, {
+            title: title,
+            description: description,
+            price: price,
+            //   imageLink: here we will implement upload functionality
+            //   publised: will implement a checkbox functionalitiy,
+          });
           alert("Course has been Added");
           router.push("/coursesssr");
         }}

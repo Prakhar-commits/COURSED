@@ -45,7 +45,7 @@ export default function SignUp() {
               size="large"
               onClick={async () => {
                 const res = await axios.post(
-                  `http://localhost:3000/api/admin/signup`,
+                  `/api/admin/signup`,
                   {
                     username: email,
                     password: password,

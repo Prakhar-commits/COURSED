@@ -11,6 +11,7 @@ export default function Home() {
   const router = useRouter();
   const userEmail = useRecoilValue(userEmailState);
   const userLoading = useRecoilValue(isUserLoadingState);
+  console.log(process.env);
 
   return (
     <div>

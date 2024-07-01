@@ -9,7 +9,7 @@ export interface Course {
 }
 export const courseState = atom<{
   isLoading: boolean;
-  course: Course | null;
+  course?: Course | null;
 }>({
   key: "courseState",
   default: {

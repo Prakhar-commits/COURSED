@@ -21,7 +21,7 @@ export default async function handler(
     res.status(200).json({ Courses: courses });
   }
 
-  if (req.method === "PUT") {
+  if (req.method === "PATCH") {
     const { courseId } = req.query;
     const course = await Course.findByIdAndUpdate(
       courseId as string,

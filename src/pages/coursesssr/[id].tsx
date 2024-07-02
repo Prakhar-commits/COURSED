@@ -1,6 +1,14 @@
 import React, { useEffect, useState } from "react";
 
-import { Box, Button, Card, Grid, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Card,
+  Container,
+  Grid,
+  TextField,
+  Typography,
+} from "@mui/material";
 import axios from "axios";
 
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
@@ -44,14 +52,16 @@ export default function CourseById() {
   return (
     <div>
       <GrayTopper />
-      <Grid container>
-        <Grid item lg={8} md={12} sm={12}>
-          <UpdateCourseCard />
+      <Container maxWidth={false} disableGutters>
+        <Grid container spacing={2}>
+          <Grid item lg={8} md={12} sm={12}>
+            <UpdateCourseCard />
+          </Grid>
+          <Grid item lg={4} md={12} sm={12}>
+            <CourseCard />
+          </Grid>
         </Grid>
-        <Grid item lg={4} md={12} sm={12}>
-          <CourseCard />
-        </Grid>
-      </Grid>
+      </Container>
     </div>
   );
 }
@@ -61,10 +71,8 @@ function GrayTopper() {
   return (
     <div
       style={{
-        height: 250,
         background: "#212121",
         top: 0,
-        width: "100vw",
         zIndex: 0,
         marginBottom: -250,
       }}
@@ -75,11 +83,18 @@ function GrayTopper() {
           display: "flex",
           justifyContent: "center",
           flexDirection: "column",
+          width: "100%",
         }}
       >
         <div>
           <Typography
-            style={{ color: "white", fontWeight: 600 }}
+            style={{
+              color: "white",
+              fontWeight: 600,
+              wordBreak: "break-word",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+            }}
             variant="h3"
             textAlign={"center"}
           >
@@ -106,7 +121,8 @@ function CourseCard() {
       <Card
         style={{
           margin: 10,
-          width: 350,
+          width: "100%",
+          maxWidth: 350,
           minHeight: 200,
           borderRadius: 20,
           marginRight: 50,
@@ -140,7 +156,7 @@ function UpdateCourseCard() {
 
   return (
     <div style={{ display: "flex", justifyContent: "center" }}>
-      <Card variant={"outlined"} style={{ maxWidth: 600, marginTop: 200 }}>
+      <Card variant={"outlined"} style={{ maxWidth: "100%", marginTop: 200 }}>
         <div style={{ padding: 20 }}>
           <Typography style={{ marginBottom: 10 }}>
             Update course details
@@ -187,42 +203,7 @@ function UpdateCourseCard() {
             label="Price"
             variant="outlined"
           />
-          {/* <Button
-          style={{ marginTop: 20 }}
-          variant="contained"
-          size="large"
-          onClick={async () => {
-            const res = await axios.patch(
-              `/api/admin/courses/`,
-              {
-                title: title,
-                description: description,
-                price: price,
-                //   imageLink: here we will implement upload functionality
-                //   published: will implement a checkbox functionalitiy,
-              },
-              {
-                params: { courseId: courseDetails?.course?._id },
-              }
-            );
-            let updatedCourse: Partial<Course>;
-            if (courseDetails?.course?._id === courseId) {
-              updatedCourse = {
-                ...courseDetails.course,
-                title: title,
-                description: description,
-                price: price,
-                _id: courseId,
-              };
-            } else {
-              updatedCourse = { ...course };
-            }
-            setCourse({ course: updatedCourse as Course, isLoading: false });
-          }}
-        >
-          UPDATE COURSE
-        </Button>
-      </Card> */}
+
           <Button
             variant="contained"
             onClick={async () => {

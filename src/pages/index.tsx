@@ -2,14 +2,15 @@ import isUserLoadingState from "@/store/selectors/isUserLoading";
 import userEmailState from "@/store/selectors/userEmail";
 
 import { Button, Grid, Typography } from "@mui/material";
-import { signIn, signOut } from "next-auth/react";
+import { signIn, signOut, useSession } from "next-auth/react";
 
 import { useRouter } from "next/router";
 import { useRecoilValue } from "recoil";
 
 export default function Home() {
+  const session = useSession();
   const router = useRouter();
-  const userEmail = useRecoilValue(userEmailState);
+
   const userLoading = useRecoilValue(isUserLoadingState);
 
   return (
@@ -21,7 +22,7 @@ export default function Home() {
             <Typography variant={"h5"}>
               A place to learn, earn and grow
             </Typography>
-            {!userEmail && (
+            {!session.data && (
               <div style={{ display: "flex", marginTop: 20 }}>
                 <div style={{ marginRight: 10 }}>
                   <Button
@@ -29,7 +30,6 @@ export default function Home() {
                     variant={"contained"}
                     onClick={() => {
                       signIn();
-                      // router.push("/signup");
                     }}
                   >
                     Signup
@@ -40,8 +40,7 @@ export default function Home() {
                     size={"large"}
                     variant={"contained"}
                     onClick={() => {
-                      signOut();
-                      // router.push("/signin");
+                      signIn();
                     }}
                   >
                     Signin

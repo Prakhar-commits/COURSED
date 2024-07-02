@@ -41,7 +41,7 @@ function Course({ course }: { course: CourseType }) {
           variant="contained"
           size="large"
           onClick={() => {
-            router.push("/coursesssr/" + course._id);
+            router.replace("/coursesssr/" + course._id);
           }}
         >
           Edit

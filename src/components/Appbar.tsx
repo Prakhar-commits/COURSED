@@ -35,13 +35,13 @@ export default function Appbar() {
       <List>
         {session.data ? (
           <>
-            <ListItem onClick={() => router.push("/")}>
+            <ListItem onClick={() => router.replace("/")}>
               <ListItemText primary={session.data.user?.email} />
             </ListItem>
-            <ListItem onClick={() => router.push("/addcourse")}>
+            <ListItem onClick={() => router.replace("/addcourse")}>
               <ListItemText primary="Add Course" />
             </ListItem>
-            <ListItem onClick={() => router.push("/coursesssr")}>
+            <ListItem onClick={() => router.replace("/coursesssr")}>
               <ListItemText primary="Courses" />
             </ListItem>
             <ListItem
@@ -105,7 +105,7 @@ export default function Appbar() {
           <Toolbar>
             <Grid container spacing={2} sx={{ padding: 2 }}>
               <Grid item xs={12} sm={6} md={4} lg={3}>
-                <Button onClick={() => router.push("/")}>
+                <Button onClick={() => router.replace("/")}>
                   <Typography variant="h6" color={"white"}>
                     {session.data ? session.data.user?.email : "Koursed"}
                   </Typography>
@@ -126,7 +126,7 @@ export default function Appbar() {
                     <Grid item>
                       <Button
                         variant="contained"
-                        onClick={() => router.push("/addcourse")}
+                        onClick={() => router.replace("/addcourse")}
                         sx={{ marginRight: 2 }}
                       >
                         Add Course
@@ -135,7 +135,7 @@ export default function Appbar() {
                     <Grid item>
                       <Button
                         variant="contained"
-                        onClick={() => router.push("/coursesssr")}
+                        onClick={() => router.replace("/coursesssr")}
                         sx={{ marginRight: 2 }}
                       >
                         Courses

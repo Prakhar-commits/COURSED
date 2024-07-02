@@ -130,59 +130,64 @@ function CourseCard() {
 }
 
 function UpdateCourseCard() {
-  const course = useRecoilValue(courseDetailsState);
   const [courseDetails, setCourse] = useRecoilState(courseState);
-  const [title, setTitle] = useState(course?.title);
-  const [description, setDescription] = useState(course?.description);
-  const [price, setPrice] = useState(course?.price);
-  const courseId = course?._id;
+  const [title, setTitle] = useState(courseDetails.course?.title);
+  const [description, setDescription] = useState(
+    courseDetails.course?.description
+  );
+  const [price, setPrice] = useState(courseDetails.course?.price);
+  const courseId = courseDetails.course?._id;
+
   return (
-    <>
-      <Card
-        variant="elevation"
-        style={{ width: 400, padding: 20, marginTop: 30, marginLeft: 30 }}
-      >
-        <Typography variant="h5">Update Course Details </Typography>
-        <Box display="flex" flexDirection="column" gap={2}>
+    <div style={{ display: "flex", justifyContent: "center" }}>
+      <Card variant={"outlined"} style={{ maxWidth: 600, marginTop: 200 }}>
+        <div style={{ padding: 20 }}>
+          <Typography style={{ marginBottom: 10 }}>
+            Update course details
+          </Typography>
           <TextField
             value={title}
+            style={{ marginBottom: 10 }}
+            onChange={(e) => {
+              setTitle(e.target.value);
+            }}
             fullWidth={true}
-            id="outlined-basic"
             label="Title"
             variant="outlined"
-            onChange={(e) => setTitle(e.target.value)}
           />
+
           <TextField
             value={description}
+            style={{ marginBottom: 10 }}
+            onChange={(e) => {
+              setDescription(e.target.value);
+            }}
             fullWidth={true}
-            id="outlined-basic"
             label="Description"
             variant="outlined"
-            onChange={(e) => setDescription(e.target.value)}
-          />{" "}
-          <TextField
-            value={price}
-            fullWidth={true}
-            id="outlined-basic"
-            label="Price"
-            variant="outlined"
-            onChange={(e) => setPrice(e.target.value)}
-          />{" "}
+          />
+
           {/* <TextField
+            value={image}
+            style={{ marginBottom: 10 }}
+            onChange={(e) => {
+              setImage(e.target.value);
+            }}
             fullWidth={true}
-            id="outlined-basic"
-            label="Image Link"
-            variant="outlined"
-          />{" "}
-          <TextField
-            fullWidth={true}
-            id="outlined-basic"
-            label="Published"
+            label="Image link"
             variant="outlined"
           /> */}
-        </Box>
-
-        <Button
+          <TextField
+            value={price}
+            style={{ marginBottom: 10 }}
+            onChange={(e) => {
+              setPrice(e.target.value);
+            }}
+            fullWidth={true}
+            label="Price"
+            variant="outlined"
+          />
+          {/* <Button
           style={{ marginTop: 20 }}
           variant="contained"
           size="large"
@@ -217,7 +222,40 @@ function UpdateCourseCard() {
         >
           UPDATE COURSE
         </Button>
+      </Card> */}
+          <Button
+            variant="contained"
+            onClick={async () => {
+              const res = await axios.patch(
+                `/api/admin/courses/`,
+                {
+                  title: title,
+                  description: description,
+                  // imageLink: image,
+                  // published: true,
+                  price: price,
+                },
+                {
+                  params: { courseId: courseDetails?.course?._id },
+                }
+              );
+              let updatedCourse: Partial<Course>;
+
+              updatedCourse = {
+                ...courseDetails.course,
+                title: title,
+                description: description,
+                price: price,
+                _id: courseId,
+              };
+
+              setCourse({ course: updatedCourse as Course, isLoading: false });
+            }}
+          >
+            Update course
+          </Button>
+        </div>
       </Card>
-    </>
+    </div>
   );
 }

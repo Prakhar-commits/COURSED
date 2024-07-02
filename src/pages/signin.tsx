@@ -53,7 +53,6 @@ export default function SignIn() {
                   isLoading: false,
                   userEmail: email,
                 });
-                console.log(setUser);
 
                 router.push("/coursesssr");
               }}

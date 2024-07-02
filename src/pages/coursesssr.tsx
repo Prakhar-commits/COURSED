@@ -54,11 +54,7 @@ function Course({ course }: { course: CourseType }) {
 export default Courses;
 
 export async function getServerSideProps() {
-  console.log("hit here");
-
   const response = await axios.get(`https://koursed.xyz/api/admin/courses`);
-
-  console.log(response.data);
 
   return {
     props: {

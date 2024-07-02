@@ -11,8 +11,7 @@ export default function SignUp() {
   const [password, setPassword] = useState("");
   const router = useRouter();
   const setUser = useSetRecoilState(userState);
-  // console.log(email);
-  // console.log(password);
+
   return (
     <>
       <Box style={{ padding: 20, display: "flex", justifyContent: "center" }}>

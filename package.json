@@ -16,6 +16,7 @@
     "@mui/material": "^5.15.20",
     "@mui/material-nextjs": "^5.15.11",
     "@mui/styled-engine-sc": "^6.0.0-alpha.18",
+    "aws-sdk": "^2.1654.0",
     "axios": "^1.7.2",
     "dotenv": "^16.4.5",
     "mongoose": "^8.4.3",

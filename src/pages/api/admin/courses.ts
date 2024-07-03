@@ -10,10 +10,17 @@ export default async function handler(
 
   if (req.method === "POST") {
     const course = new Course(req.body);
-    await course.save();
-    res
-      .status(200)
-      .json({ message: "Course created successsfully", CourseId: course._id });
+    console.log(course);
+
+    try {
+      await course.save();
+      res.status(200).json({
+        message: "Course created successsfully",
+        CourseId: course._id,
+      });
+    } catch (error) {
+      res.status(500).json({ message: error });
+    }
   }
 
   if (req.method === "GET") {

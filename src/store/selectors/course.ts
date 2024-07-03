@@ -40,3 +40,19 @@ export const coursePriceState = selector({
     return state.course?.price;
   },
 });
+
+export const courseImageState = selector({
+  key: "courseImageState",
+  get: ({ get }) => {
+    const state = get(courseState);
+    return state.course?.imageLink;
+  },
+});
+
+export const coursePublishedState = selector({
+  key: "coursePublishState",
+  get: ({ get }) => {
+    const state = get(courseState);
+    return state.course?.imageLink;
+  },
+});

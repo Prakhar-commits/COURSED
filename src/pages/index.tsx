@@ -1,8 +1,7 @@
 import isUserLoadingState from "@/store/selectors/isUserLoading";
-import userEmailState from "@/store/selectors/userEmail";
 
 import { Button, Grid, Typography } from "@mui/material";
-import { signIn, signOut, useSession } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 
 import { useRouter } from "next/router";
 import { useRecoilValue } from "recoil";

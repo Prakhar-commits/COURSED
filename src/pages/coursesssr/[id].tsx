@@ -16,10 +16,13 @@ import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { Course, courseState } from "@/store/atoms/course";
 import {
   courseDetailsState,
+  courseImageState,
   coursePriceState,
   courseTitleState,
 } from "@/store/selectors/course";
 import { useRouter } from "next/router";
+import DragAndDropImage from "@/components/ImageDragAndDrop";
+import Image from "next/image";
 
 export default function CourseById() {
   const setCourse = useSetRecoilState(courseState);
@@ -109,6 +112,8 @@ function GrayTopper() {
 function CourseCard() {
   const title = useRecoilValue(courseTitleState);
   const price = useRecoilValue(coursePriceState);
+  const imageLink = useRecoilValue(courseImageState);
+  // const published = useRecoilValue(coursePublished);
   return (
     <div
       style={{
@@ -130,7 +135,7 @@ function CourseCard() {
           zIndex: 2,
         }}
       >
-        {/* <img src={course.imageLink} style={{ width: 350 }}></img> */}
+        <img src={imageLink} width={350} alt="course-image" />
         <div style={{ marginLeft: 10 }}>
           <Typography variant="h5">{title}</Typography>
           <Typography variant="subtitle2" style={{ color: "gray" }}>
@@ -138,6 +143,9 @@ function CourseCard() {
           </Typography>
           <Typography variant="subtitle1">
             <b>Rs {price} </b>
+          </Typography>
+          <Typography variant="subtitle1">
+            <b>Rs {} </b>
           </Typography>
         </div>
       </Card>
@@ -151,7 +159,9 @@ function UpdateCourseCard() {
   const [description, setDescription] = useState(
     courseDetails.course?.description
   );
+  const [imageLink, setImageLink] = useState(courseDetails.course?.imageLink);
   const [price, setPrice] = useState(courseDetails.course?.price);
+  // const [published, setPublished] = useState(courseDetails.course?.published);
   const courseId = courseDetails.course?._id;
 
   return (
@@ -183,19 +193,10 @@ function UpdateCourseCard() {
             variant="outlined"
           />
 
-          {/* <TextField
-            value={image}
-            style={{ marginBottom: 10 }}
-            onChange={(e) => {
-              setImage(e.target.value);
-            }}
-            fullWidth={true}
-            label="Image link"
-            variant="outlined"
-          /> */}
+          <DragAndDropImage imageLink={imageLink} setImageLink={setImageLink} />
           <TextField
             value={price}
-            style={{ marginBottom: 10 }}
+            style={{ marginBottom: 10, marginTop: 10 }}
             onChange={(e) => {
               setPrice(e.target.value);
             }}
@@ -212,8 +213,8 @@ function UpdateCourseCard() {
                 {
                   title: title,
                   description: description,
-                  // imageLink: image,
-                  // published: true,
+                  imageLink: imageLink,
+                  // published: published,
                   price: price,
                 },
                 {
@@ -231,6 +232,7 @@ function UpdateCourseCard() {
               };
 
               setCourse({ course: updatedCourse as Course, isLoading: false });
+              alert("Course has been updated");
             }}
           >
             Update course

@@ -1,3 +1,4 @@
+import DragAndDropImage from "@/components/ImageDragAndDrop";
 import { Box, Button, Card, TextField, Typography } from "@mui/material";
 import axios from "axios";
 import { useRouter } from "next/router";
@@ -39,18 +40,13 @@ export default function AddCourse() {
             variant="outlined"
             onChange={(e) => setPrice(e.target.value)}
           />
-          {/* <TextField
-            fullWidth={true}
-            id="outlined-basic"
-            label="Image Link"
-            variant="outlined"
-          />{" "}
+          <DragAndDropImage imageLink={imagelink} setImageLink={setImageLink} />
           <TextField
             fullWidth={true}
             id="outlined-basic"
             label="Published"
             variant="outlined"
-          /> */}
+          />
         </Box>
       </Card>
       <Button
@@ -61,10 +57,11 @@ export default function AddCourse() {
             title: title,
             description: description,
             price: price,
-            //   imageLink: here we will implement upload functionality
+            imageLink: imagelink,
             //   publised: will implement a checkbox functionalitiy,
           });
           alert("Course has been Added");
+          console.log(imagelink);
           router.replace("/coursesssr");
         }}
       >

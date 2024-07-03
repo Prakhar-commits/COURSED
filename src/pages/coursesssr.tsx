@@ -1,8 +1,6 @@
 import { Button, Card, Typography } from "@mui/material";
-
 import axios from "axios";
 import { useRouter } from "next/router.js";
-
 import { Course as CourseType } from "@/store/atoms/course";
 
 function Courses({ courses }: { courses: CourseType[] }) {
@@ -19,6 +17,7 @@ function Courses({ courses }: { courses: CourseType[] }) {
 
 function Course({ course }: { course: CourseType }) {
   const router = useRouter();
+  console.log(course.imageLink);
 
   return (
     <Card
@@ -35,7 +34,7 @@ function Course({ course }: { course: CourseType }) {
       <Typography textAlign={"center"} variant="subtitle1">
         {course.description}
       </Typography>
-      {/* <img src={course.imageLink} style={{ width: 300 }}></img> */}
+      <img src={course.imageLink} style={{ width: 300 }}></img>
       <div style={{ display: "flex", justifyContent: "center", marginTop: 20 }}>
         <Button
           variant="contained"

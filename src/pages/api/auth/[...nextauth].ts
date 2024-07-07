@@ -1,7 +1,10 @@
+import Admin from "@/models/Admin";
 import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import Google from "next-auth/providers/google";
 import { Provider } from "next-auth/providers/index";
+import bcrypt from "bcrypt";
+import connect from "@/lib/mongoose";
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -22,12 +25,26 @@ export const authOptions: NextAuthOptions = {
         },
       },
       async authorize(credentials, req) {
-        const user = { id: "1", name: "J Smith", email: "jsmith@example.com" };
-
-        if (user) {
-          return user;
-        } else {
-          return null;
+        const username = credentials?.username;
+        const password = credentials?.password;
+        await connect();
+        let admin = await Admin.findOne({ username });
+        try {
+          if (admin) {
+            const validPassword = bcrypt.compareSync(password!, admin.password);
+            if (validPassword) {
+              return admin;
+            } else {
+              return null;
+            }
+          } else {
+            const hashedPassword = bcrypt.hashSync(password!, 10);
+            admin = new Admin({ username: username, password: hashedPassword });
+            await admin.save();
+            return admin;
+          }
+        } catch (e) {
+          console.log(e);
         }
       },
     }),

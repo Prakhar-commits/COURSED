@@ -43,7 +43,7 @@ function Course({ course }: { course: CourseType }) {
             router.replace("/coursesssr/" + course._id);
           }}
         >
-          Edit Course
+          Edit
         </Button>
       </div>
     </Card>

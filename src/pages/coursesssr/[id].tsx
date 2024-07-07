@@ -4,6 +4,7 @@ import {
   Box,
   Button,
   Card,
+  CircularProgress,
   Container,
   Grid,
   TextField,
@@ -19,6 +20,7 @@ import {
   courseImageState,
   coursePriceState,
   courseTitleState,
+  isCourseLoadingState,
 } from "@/store/selectors/course";
 import { useRouter } from "next/router";
 import DragAndDropImage from "@/components/ImageDragAndDrop";
@@ -27,11 +29,13 @@ import Image from "next/image";
 export default function CourseById() {
   const setCourse = useSetRecoilState(courseState);
   const course = useRecoilValue(courseDetailsState);
+  const isLoading = useRecoilValue(isCourseLoadingState);
   const {
     query: { id },
   } = useRouter();
 
   const getCourseById = async () => {
+    setCourse((prevState) => ({ ...prevState, isLoading: true }));
     const response = await axios.get(`/api/admin/courses`);
     const courses: Course[] = response.data.Courses;
     const course = courses.find((course) => {
@@ -43,6 +47,18 @@ export default function CourseById() {
   useEffect(() => {
     getCourseById();
   }, []);
+  if (isLoading) {
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        minHeight="100vh"
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
 
   if (!course) {
     return (
@@ -145,7 +161,7 @@ function CourseCard() {
             <b>Rs {price} </b>
           </Typography>
           <Typography variant="subtitle1">
-            <b>Rs {} </b>
+            <b> {} </b>
           </Typography>
         </div>
       </Card>

@@ -35,7 +35,7 @@ export default function CourseById() {
   } = useRouter();
 
   const getCourseById = async () => {
-    setCourse((prevState) => ({ ...prevState, isLoading: true }));
+    // setCourse((prevState) => ({ ...prevState, isLoading: true }));
     const response = await axios.get(`/api/admin/courses`);
     const courses: Course[] = response.data.Courses;
     const course = courses.find((course) => {
@@ -47,18 +47,18 @@ export default function CourseById() {
   useEffect(() => {
     getCourseById();
   }, []);
-  if (isLoading) {
-    return (
-      <Box
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-        minHeight="100vh"
-      >
-        <CircularProgress />
-      </Box>
-    );
-  }
+  // if (isLoading) {
+  //   return (
+  //     <Box
+  //       display="flex"
+  //       justifyContent="center"
+  //       alignItems="center"
+  //       minHeight="100vh"
+  //     >
+  //       <CircularProgress />
+  //     </Box>
+  //   );
+  // }
 
   if (!course) {
     return (

@@ -17,7 +17,6 @@ function Courses({ courses }: { courses: CourseType[] }) {
 
 function Course({ course }: { course: CourseType }) {
   const router = useRouter();
-  console.log(course.imageLink);
 
   return (
     <Card
@@ -40,7 +39,7 @@ function Course({ course }: { course: CourseType }) {
           variant="contained"
           size="large"
           onClick={() => {
-            router.replace("/coursesssr/" + course._id);
+            router.push("/coursesssr/" + course._id);
           }}
         >
           Edit

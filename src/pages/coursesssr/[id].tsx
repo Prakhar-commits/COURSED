@@ -30,23 +30,33 @@ export default function CourseById() {
   const setCourse = useSetRecoilState(courseState);
   const course = useRecoilValue(courseDetailsState);
   const isLoading = useRecoilValue(isCourseLoadingState);
+  const [coursenotfound, setCourseNotFound] = useState(false);
   const {
     query: { id },
+    isReady,
   } = useRouter();
 
   const getCourseById = async () => {
     setCourse((prevState) => ({ ...prevState, isLoading: true }));
-    const response = await axios.get(`/api/admin/courses`);
-    const courses: Course[] = response.data.Courses;
-    const course = courses.find((course) => {
-      return course._id === id;
-    });
-    setCourse({ isLoading: false, course: course });
+    try {
+      const response = await axios.get(`/api/admin/courses`, {
+        params: { courseId: id },
+      });
+      const course: Course = response.data.Course;
+      setCourse({ isLoading: false, course: course });
+    } catch (e) {
+      setCourseNotFound(true);
+      setCourse({
+        isLoading: false,
+      });
+      console.log(e);
+    }
   };
 
   useEffect(() => {
+    if (!isReady) return;
     getCourseById();
-  }, []);
+  }, [id]);
   if (isLoading) {
     return (
       <Box
@@ -60,7 +70,7 @@ export default function CourseById() {
     );
   }
 
-  if (!course) {
+  if (coursenotfound) {
     return (
       <Typography variant="h6" textAlign={"center"}>
         Course not found.

@@ -61,7 +61,7 @@ export default function AddCourse() {
             //   publised: will implement a checkbox functionalitiy,
           });
           alert("Course has been Added");
-          console.log(imagelink);
+
           router.replace("/coursesssr");
         }}
       >

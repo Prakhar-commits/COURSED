@@ -10,7 +10,6 @@ export default async function handler(
 
   if (req.method === "POST") {
     const course = new Course(req.body);
-    console.log(course);
 
     try {
       await course.save();
@@ -24,8 +23,23 @@ export default async function handler(
   }
 
   if (req.method === "GET") {
-    const courses = await Course.find({});
-    res.status(200).json({ Courses: courses });
+    const { courseId } = req.query;
+
+    try {
+      if (courseId) {
+        const courseById = await Course.findById(courseId);
+        if (courseById) {
+          res.status(200).json({ Course: courseById });
+        } else {
+          res.status(400).json({ Course: null });
+        }
+      } else {
+        const courses = await Course.find({});
+        res.status(200).json({ Courses: courses });
+      }
+    } catch (e) {
+      res.status(400).json({ message: "Course not found", status: false });
+    }
   }
 
   if (req.method === "PATCH") {

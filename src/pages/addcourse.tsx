@@ -9,7 +9,7 @@ export default function AddCourse() {
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
   const [imagelink, setImageLink] = useState("");
-  const [published, setPublished] = useState("");
+  // const [published, setPublished] = useState("");
   const router = useRouter();
   return (
     <Box display="flex" flexDirection="column" alignItems="center" gap={3}>
@@ -41,13 +41,13 @@ export default function AddCourse() {
             onChange={(e) => setPrice(e.target.value)}
           />
           <DragAndDropImage imageLink={imagelink} setImageLink={setImageLink} />
-          <TextField
+          {/* <TextField
             fullWidth={true}
             id="outlined-basic"
             label="Published"
             variant="outlined"
             onChange={(e) => setPublished(e.target.value)}
-          />
+          /> */}
         </Box>
       </Card>
       <Button
@@ -59,7 +59,7 @@ export default function AddCourse() {
             description: description,
             price: price,
             imageLink: imagelink,
-            published: published,
+            // published: published,
           });
           alert("Course has been Added");
 

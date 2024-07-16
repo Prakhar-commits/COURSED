@@ -140,7 +140,7 @@ function CourseCard() {
   const title = useRecoilValue(courseTitleState);
   const price = useRecoilValue(coursePriceState);
   const imageLink = useRecoilValue(courseImageState);
-  const published = useRecoilValue(coursePublishedState);
+  // const published = useRecoilValue(coursePublishedState);
   return (
     <div
       style={{
@@ -188,7 +188,7 @@ function UpdateCourseCard() {
   );
   const [imageLink, setImageLink] = useState(courseDetails.course?.imageLink);
   const [price, setPrice] = useState(courseDetails.course?.price);
-  const [published, setPublished] = useState(courseDetails.course?.published);
+  // const [published, setPublished] = useState(courseDetails.course?.published);
   const courseId = courseDetails.course?._id;
 
   return (
@@ -241,7 +241,7 @@ function UpdateCourseCard() {
                   title: title,
                   description: description,
                   imageLink: imageLink,
-                  published: published,
+                  // published: published,
                   price: price,
                 },
                 {

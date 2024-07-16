@@ -46,6 +46,7 @@ export default function AddCourse() {
             id="outlined-basic"
             label="Published"
             variant="outlined"
+            onChange={(e) => setPublished(e.target.value)}
           />
         </Box>
       </Card>
@@ -58,7 +59,7 @@ export default function AddCourse() {
             description: description,
             price: price,
             imageLink: imagelink,
-            //   publised: will implement a checkbox functionalitiy,
+            published: published,
           });
           alert("Course has been Added");
 

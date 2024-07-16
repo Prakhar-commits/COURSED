@@ -19,6 +19,7 @@ import {
   courseDetailsState,
   courseImageState,
   coursePriceState,
+  coursePublishedState,
   courseTitleState,
   isCourseLoadingState,
 } from "@/store/selectors/course";
@@ -139,7 +140,7 @@ function CourseCard() {
   const title = useRecoilValue(courseTitleState);
   const price = useRecoilValue(coursePriceState);
   const imageLink = useRecoilValue(courseImageState);
-  // const published = useRecoilValue(coursePublished);
+  const published = useRecoilValue(coursePublishedState);
   return (
     <div
       style={{
@@ -171,7 +172,7 @@ function CourseCard() {
             <b>Rs {price} </b>
           </Typography>
           <Typography variant="subtitle1">
-            <b> {} </b>
+            {/* <b> {published} </b> */}
           </Typography>
         </div>
       </Card>
@@ -187,7 +188,7 @@ function UpdateCourseCard() {
   );
   const [imageLink, setImageLink] = useState(courseDetails.course?.imageLink);
   const [price, setPrice] = useState(courseDetails.course?.price);
-  // const [published, setPublished] = useState(courseDetails.course?.published);
+  const [published, setPublished] = useState(courseDetails.course?.published);
   const courseId = courseDetails.course?._id;
 
   return (
@@ -240,7 +241,7 @@ function UpdateCourseCard() {
                   title: title,
                   description: description,
                   imageLink: imageLink,
-                  // published: published,
+                  published: published,
                   price: price,
                 },
                 {
